@@ -2,19 +2,14 @@
 import { } from '@dcl/sdk/math'
 import { Animator, AudioSource, AvatarAttach, GltfContainer, Transform, VisibilityComponent, engine, pointerEventsSystem } from '@dcl/sdk/ecs'
 import { initAssetPacks } from '@dcl/asset-packs/dist/scene-entrypoint'
-//import * as crypto from 'dcl-crypto-toolkit';  //this works
 
 import { buildScene } from './builder'
-//import { Button } from './button'
-import { Paid_Button,Door, } from './uiButton' 
-//import { setupUi,toggleUIVisibility } from './uiButton'
+import { Paid_Button,Door } from './uiButton' 
 
 export function main() {
-  buildScene()
- // toggleUIVisibility()
-Door
-Paid_Button
-// setupUi()
+  buildScene()     // 3d models 
+  Door            // door with animation and sound 
+  Paid_Button    // paid button with ui animation and sound
 }
 
 main()

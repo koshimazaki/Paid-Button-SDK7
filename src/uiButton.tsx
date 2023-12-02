@@ -11,6 +11,14 @@ import ReactEcs, { Button, Input, Label, ReactEcsRenderer, UiEntity } from '@dcl
 import * as utils from '@dcl-sdk/utils'
 import * as crypto from 'dcl-crypto-toolkit'
 
+
+// Payment 
+
+let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+
+let paymentAmount = ''; // variable, payment amount set by the player
+
+
 // Audio 
 
 // Create Audio entities
@@ -72,12 +80,6 @@ function openDoor() {
     playSound(openSound) // Play the sound of the door opening
 }
 
-// Payment 
-
-let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
-
-let paymentAmount = '10'; // variable, payment amount set by the player
-
 
 // flag for visibility of toggling UI  
 var isUIVisible = false;
@@ -106,9 +108,9 @@ export const Paid_Button = engine.addEntity();
 
     },
     () => {
-      playSound(buttonSound);//play click sound once we press the button
+      playSound(buttonSound); //play click sound once we press the button
 
-      toggleUIVisibility();
+      toggleUIVisibility(); // function toggles UI on/off 
      
     }
   )
@@ -128,14 +130,10 @@ export const Paid_Button = engine.addEntity();
   function onButtonPressed() {
     const animator = Animator.getMutable(Paid_Button)
     animator.states[1].playing = true  // Start playing 'Action Button' animation
-//playSound(buttonSound)
-//Animator(buttonAnimator)
   }
 
+
 // UI setup //
-export function setupUi() {
-  ReactEcsRenderer.setUiRenderer(uiComponent)
-}
 
 const uiComponent = () => (
  
@@ -174,11 +172,11 @@ const uiComponent = () => (
     >
     <Input
       onChange={(value) => {
-        value = '10';     //Mana value;
+        paymentAmount  = value;     //Mana value;
       }}
       fontSize={24}
       placeholder={'10'}
-      placeholderColor={Color4.Black()}
+      placeholderColor={Color4.Gray()}
       uiTransform={{ width: '10%', height: '40px', margin: '0px 0px' }}
     />
     <Label
@@ -225,7 +223,7 @@ onMouseDown={async () => {
     const numericAmount = parseFloat(paymentAmount); // Convert to number
     if (!isNaN(numericAmount)) {
 
-      
+      if (numericAmount >=10){
       // Send the transaction and use .then() for handling the promise
     crypto.mana.send(myWallet, numericAmount, true).then(() => {
   
@@ -233,7 +231,7 @@ onMouseDown={async () => {
         openDoor(); // Open the door after successful payment
 
         console.log(paymentAmount, 'Mana'); // Log amount sent
-      //  playSound(acceptSound);
+
 
         // Hide the UI
         toggleUIVisibility();
@@ -246,21 +244,19 @@ onMouseDown={async () => {
 
     } else {
       console.error('Invalid amount');
-              playSound(buttonSound);
-
+              playSound(acceptSound);
+               toggleErrorMessageVisibility() 
     }
-  } catch (error) {
+  }}catch (error) {
     console.error('Error:', error);
   }
 
-  
 }}
-
 
 uiBackground={{
   textureMode: 'stretch', // makes it fit to the UI object
   texture: {
-    src: "images/proceed.png",  // using png texture as example here
+    src: "images/proceed.png",  // using png texture 
   }
 }}
 
@@ -290,3 +286,67 @@ uiBackground={{
      </UiEntity> 
   </UiEntity>
 );
+
+var isErrorMessageVisible = false; // flag for error UI page
+
+// Function to toggle the visibility of the error message
+export function toggleErrorMessageVisibility() {
+  isErrorMessageVisible = !isErrorMessageVisible;
+  setupUi();
+}
+
+
+// Error Message UI component
+const errorMessageComponent = () => (
+  <UiEntity
+    uiTransform={{
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      positionType: 'absolute',
+      width: '50%',
+      height: '30%',
+      position: { left: '25%', top: '35%' },
+      display: isErrorMessageVisible ? 'flex' : 'none'
+    }}
+    uiBackground={{
+      textureMode: 'stretch',
+      texture: {
+        src: "images/error_panel.png",
+      }
+    }}
+  >
+    <Label
+      value="Error: Pay minimum 10 MANA to open the door"
+      fontSize={24}
+      color={Color4.Black()}
+      uiTransform={{ width: '100%', height: 60, alignContent: 'center', margin: '20px' }}
+    />
+    <Button
+      value="Close"
+      variant="primary"
+      fontSize={22}
+      uiTransform={{ width: '30%', height: 50, margin: '20px' }}
+      onMouseDown={() => {
+        toggleErrorMessageVisibility();
+      }}
+      uiBackground={{
+        textureMode: 'stretch',
+        texture: {
+          src: "images/cancel.png",
+        }
+      }}
+    />
+  </UiEntity>
+);
+
+
+// SetupUi function to render the UI pages based on state
+export function setupUi() {
+  if (isErrorMessageVisible) {
+    ReactEcsRenderer.setUiRenderer(errorMessageComponent);
+  } else {
+    ReactEcsRenderer.setUiRenderer(uiComponent);
+  }
+}
+
