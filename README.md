@@ -11,7 +11,7 @@ Key components:
 
 https://github.com/koshimazaki/Paid-Button-SDK7/assets/18751916/2ee6b958-794a-4cc7-a77b-3f4c18a77b5d
 
-Repo needs [dcl-crypto-toolkit](https://github.com/decentraland/dcl-crypto-toolkit) installed.
+Repo needs [dcl-crypto-toolkit](https://github.com/decentraland/dcl-crypto-toolkit) installed as well as the below.
 
 # Guide to setup SDK7 scene 
 
