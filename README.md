@@ -1,3 +1,21 @@
+## Paid Button in Decentraland SDK7
+
+A simple interactive scene in Decentraland enabling users to pay $MANA in order to enter the area or venue.
+Code refactored to DCL SDK7.
+
+Key components:
+- Web3 Tools: Uses eth-connect and [Decentraland Crypto Toolkit](https://github.com/decentraland/dcl-crypto-toolkit) library for $MANA or ERC20 transactions.
+- UI: Built with DCL React for user interface design.
+- Modified original repo by adding minimum payment and 2x UI pages as example.
+- Audio samples and animations are triggered via UI, pressing button or once transaction is made.
+
+https://github.com/koshimazaki/Paid-Button-SDK7/assets/18751916/2ee6b958-794a-4cc7-a77b-3f4c18a77b5d
+
+Repo needs [dcl-crypto-toolkit](https://github.com/decentraland/dcl-crypto-toolkit) installed.
+
+# Guide to setup SDK7 scene 
+
+
 # SDK7 Template scene
 
 ## Try it out
